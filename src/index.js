@@ -50,8 +50,8 @@ function returnFnResult(fn) {
   var f = (() => "привет" );
   return f;
 }
-var f = returnFnResult();
-console.log(f());
+var F = returnFnResult();
+console.log(F());
 
 /*
  Задание 4:
