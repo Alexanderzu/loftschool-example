@@ -47,11 +47,8 @@ console.log(sumWithDefaults(10, 20));
  */
 
 function returnFnResult(fn) {
-  var f = (() => "привет" );
-  return f;
+  return fn();
 }
-var F = returnFnResult();
-console.log(F());
 
 /*
  Задание 4:
@@ -113,10 +110,9 @@ returnArgumentsArray(1, 2, 3);
 
    console.log(newSum()) выведет 6
  */
-function bindFunction(fn) {
-
+function bindFunction(fn, ...arg) {
+  return fn.bind(null, ...arg);
 }
-
 
 export {
     returnFirstArgument,
