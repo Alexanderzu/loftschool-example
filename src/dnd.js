@@ -2,14 +2,18 @@
 
 /*
  Создайте страницу с кнопкой.
- При нажатии на кнопку должен создаваться div со случайными размерами, цветом и позицией на экране
- Необходимо предоставить возможность перетаскивать созданные div при помощи drag and drop
- Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
+ При нажатии на кнопку должен создаваться div со случайными размерами, 
+ цветом и позицией на экране
+ Необходимо предоставить возможность перетаскивать созданные 
+ div при помощи drag and drop
+ Запрещено использовать сторонние библиотеки. 
+ Разрешено пользоваться только тем, что встроено в браузер
  */
 
 /*
  homeworkContainer - это контейнер для всех ваших домашних заданий
- Если вы создаете новые html-элементы и добавляете их на страницу, то дабавляйте их только в этот контейнер
+ Если вы создаете новые html-элементы и добавляете их на страницу, 
+ то дабавляйте их только в этот контейнер
 
  Пример:
    const newDiv = document.createElement('div');
@@ -27,6 +31,26 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
+  var div = document.createElement("div");
+  div.classList.add('draggable-div');
+  var divHeight = Math.random(10) * 100;
+  var divWidth = Math.random(10) * 100;
+
+  var divTop = Math.random(10) * 100;
+  var divLeft = Math.random(10) * 100;
+
+  var r=Math.floor(Math.random() * (256));
+  var g=Math.floor(Math.random() * (256));
+  var b=Math.floor(Math.random() * (256));
+  var divBackgroundColor = '#' + r.toString(16) + g.toString(16) + b.toString(16);
+
+  div.style.width = divHeight + "px";
+  div.style.height = divWidth + "px";
+  div.style.backgroundColor = divBackgroundColor;
+
+  div.style.position = "absolute";
+  div.style.top = divTop + "px";
+  div.style.left = divLeft + "px";
 }
 
 /*
