@@ -5,14 +5,16 @@
 
  При вводе в текстовое поле, под ним должен появляться список тех городов,
  в названии которых, хотя бы частично, есть введенное значение.
- Регистр символов учитываться не должен, то есть "Moscow" и "moscow" - одинаковые названия.
+ Регистр символов учитываться не должен, то есть "Moscow" и "moscow" 
+ - одинаковые названия.
 
  Во время загрузки городов, на странице должна быть надпись "Загрузка..."
  После окончания загрузки городов, надпись исчезает и появляется текстовое поле.
 
  Разметку смотрите в файле towns-content.hbs
 
- Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
+ Запрещено использовать сторонние библиотеки. 
+ Разрешено пользоваться только тем, что встроено в браузер
 
  *** Часть со звездочкой ***
  Если загрузка городов не удалась (например, отключился интернет или сервер вернул ошибку),
@@ -31,13 +33,51 @@
 const homeworkContainer = document.querySelector('#homework-container');
 
 /*
- Функция должна вернуть Promise, который должен быть разрешен с массивом городов в качестве значения
+ Функция должна вернуть Promise, 
+ который должен быть разрешен с массивом городов в качестве значения
 
  Массив городов пожно получить отправив асинхронный запрос по адресу
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+    xhr.send();
+    xhr.addEventListener('load', () => {
+      const citys = JSON.parse(xhr.responseText);
+      if ( xhr.status >= 400 ) {
+        console.log("Error status");
+      } else {
+        resolve(citys.sort(function(a, b) { 
+          if (a.name > b.name) { 
+            return 1; } 
+          if (a.name < b.name) { 
+            return -1; } 
+          return 0; 
+        }));
+
+        filterBlock.style.display = 'block';
+        loadingBlock.innerHTML= "";
+
+        for ( var city of citys) {
+          const cityDom = createCityDOM(city);
+          loadingBlock.appendChild(cityDom);
+        }
+
+        function createCityDOM(city) {
+          var div = document.createElement("span");
+          div.classList.add("city");
+          div.textContent = `${city.name}`
+          return div;
+        }
+
+      }
+
+    });
+  });
 }
+loadTowns();
 
 /*
  Функция должна проверять встречается ли подстрока chunk в строке full
@@ -51,6 +91,11 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
+  if (full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /* Блок с надписью "Загрузка" */
@@ -62,8 +107,21 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+
 filterInput.addEventListener('keyup', function() {
     // это обработчик нажатия кливиш в текстовом поле
+
+    const value = filterInput.value;
+
+    if (!value) {
+      loadTowns();
+      return;
+    } 
+    const filtredCity = citys.filter(city => 
+      isMatching(`${city.name}`, value)
+    );
+    loadTowns(filtredCity);
+    
 });
 
 export {

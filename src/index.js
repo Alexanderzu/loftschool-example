@@ -12,20 +12,15 @@ import { rejects } from "assert";
  Пример:
    delayPromise(3) // вернет promise, который будет разрешен через 3 секунды
  */
+
 function delayPromise(seconds) {
-  // var promise = new Promise((resolve, rejects) => {
-  //   setTimeout(() => {
-  //     resolve("result")
-  //   }, seconds)
-  // });
-  // promise.
-  //   then(
-  //     result => {
-  //       console.log("Fulfilled: " + result);
-  //     }
-  //   );
-}
-// delayPromise(10000)
+  var seconds = 1000;
+  return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+          resolve();
+      }, seconds);
+  });
+};
 
 /*
  Задание 2:
@@ -43,7 +38,29 @@ function delayPromise(seconds) {
    // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+    xhr.responseType = 'json';
+    xhr.send();
+    xhr.addEventListener('load', () => {
+      var data = xhr.response;
+      if ( xhr.status >= 400 ) {
+        console.log("Error status");
+      } else {
+      resolve(data.sort(function(a, b) { 
+          if (a.name > b.name) { 
+            return 1; } 
+          if (a.name < b.name) { 
+            return -1; } 
+          return 0; 
+        }));
+      console.log(data)
+      }
+    });
+  });
 }
+loadAndSortTowns();
 
 export {
     delayPromise,
