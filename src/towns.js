@@ -45,11 +45,11 @@ function loadTowns() {
     xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
     xhr.send();
     xhr.addEventListener('load', () => {
-      const citys = JSON.parse(xhr.responseText);
+      const cities = JSON.parse(xhr.responseText);
       if ( xhr.status >= 400 ) {
         console.log("Error status");
       } else {
-        resolve(citys.sort(function(a, b) { 
+        resolve(cities.sort(function(a, b) { 
           if (a.name > b.name) { 
             return 1; } 
           if (a.name < b.name) { 
@@ -60,9 +60,9 @@ function loadTowns() {
         filterBlock.style.display = 'block';
         loadingBlock.innerHTML= "";
 
-        for ( var city of citys) {
+        for ( var city of cities) {
           const cityDom = createCityDOM(city);
-          loadingBlock.appendChild(cityDom);
+          filterResult.appendChild(cityDom);
         }
 
         function createCityDOM(city) {
@@ -77,7 +77,7 @@ function loadTowns() {
     });
   });
 }
-loadTowns();
+
 
 /*
  Функция должна проверять встречается ли подстрока chunk в строке full
@@ -107,6 +107,13 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+let towns = [];
+
+loadTowns()
+  .then((cities) => {
+    // towns - глобальная переменная, объявленная в начале файла
+    towns = cities;
+  });
 
 filterInput.addEventListener('keyup', function() {
     // это обработчик нажатия кливиш в текстовом поле
@@ -114,13 +121,13 @@ filterInput.addEventListener('keyup', function() {
     const value = filterInput.value;
 
     if (!value) {
-      loadTowns();
+      loadTowns(towns);
       return;
     } 
-    const filtredCity = citys.filter(city => 
+    const filtredCity = towns.filter(city => 
       isMatching(`${city.name}`, value)
     );
-    loadTowns(filtredCity);
+    return loadTowns(filtredCity);
     
 });
 
