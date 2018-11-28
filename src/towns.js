@@ -58,22 +58,21 @@ function loadTowns() {
         }));
 
         filterBlock.style.display = 'block';
-        loadingBlock.innerHTML= "";
+        // loadingBlock.innerHTML= "";
 
-        for ( var city of cities) {
-          const cityDom = createCityDOM(city);
-          filterResult.appendChild(cityDom);
-        }
+        // for ( var city of cities) {
+        //   const cityDom = createCityDOM(city);
+        //   filterResult.appendChild(cityDom);
+        // }
 
-        function createCityDOM(city) {
-          var div = document.createElement("span");
-          div.classList.add("city");
-          div.textContent = `${city.name}`
-          return div;
-        }
-
+        // function createCityDOM(city) {
+        //   var div = document.createElement("span");
+        //   div.classList.add("city");
+        //   div.textContent = `${city.name}`
+        //   return div;
+        // }
+        renderCities()
       }
-
     });
   });
 }
@@ -98,6 +97,8 @@ function isMatching(full, chunk) {
   }
 }
 
+
+
 /* Блок с надписью "Загрузка" */
 const loadingBlock = homeworkContainer.querySelector('#loading-block');
 /* Блок с текстовым полем и результатом поиска */
@@ -115,20 +116,37 @@ loadTowns()
     towns = cities;
   });
 
+const renderCities = (cities) => {
+ 
+  loadingBlock.innerHTML= "";
+
+  for ( var city of cities) {
+    const cityDom = createCityDOM(city);
+    filterResult.appendChild(cityDom);
+  }
+
+  function createCityDOM(city) {
+    var div = document.createElement("span");
+    div.classList.add("city");
+    div.textContent = `${city.name}`
+    return div;
+  }
+  
+}
+
+
+
 filterInput.addEventListener('keyup', function() {
-    // это обработчик нажатия кливиш в текстовом поле
-
-    const value = filterInput.value;
-
-    if (!value) {
-      loadTowns(towns);
-      return;
-    } 
-    const filtredCity = towns.filter(city => 
-      isMatching(`${city.name}`, value)
-    );
-    return loadTowns(filtredCity);
-    
+  // это обработчик нажатия кливиш в текстовом поле
+  const value = filterInput.value;
+  if (!value) {
+    renderCities(towns);
+    return;
+  } 
+  const filtredCity = towns.filter(city => 
+    isMatching(`${city.name}`, value)
+  );
+	renderCities(filtredCity);
 });
 
 export {
