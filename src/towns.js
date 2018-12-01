@@ -49,29 +49,17 @@ function loadTowns() {
       if ( xhr.status >= 400 ) {
         console.log("Error status");
       } else {
-        resolve(cities.sort(function(a, b) { 
+        const sortedCities = cities.sort(function(a, b) { 
           if (a.name > b.name) { 
             return 1; } 
           if (a.name < b.name) { 
             return -1; } 
           return 0; 
-        }));
-
+        });
         filterBlock.style.display = 'block';
-        // loadingBlock.innerHTML= "";
-
-        // for ( var city of cities) {
-        //   const cityDom = createCityDOM(city);
-        //   filterResult.appendChild(cityDom);
-        // }
-
-        // function createCityDOM(city) {
-        //   var div = document.createElement("span");
-        //   div.classList.add("city");
-        //   div.textContent = `${city.name}`
-        //   return div;
-        // }
-        renderCities()
+        loadingBlock.innerHTML = '';
+        renderCities(sortedCities);
+        resolve(sortedCities);
       }
     });
   });
@@ -118,15 +106,15 @@ loadTowns()
 
 const renderCities = (cities) => {
  
-  loadingBlock.innerHTML= "";
+  filterResult.innerHTML= '';
 
-  for ( var city of cities) {
+  for (var city of cities) {
     const cityDom = createCityDOM(city);
     filterResult.appendChild(cityDom);
   }
 
   function createCityDOM(city) {
-    var div = document.createElement("span");
+    var div = document.createElement("div");
     div.classList.add("city");
     div.textContent = `${city.name}`
     return div;
